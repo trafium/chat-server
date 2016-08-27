@@ -12,6 +12,39 @@ var mysql = require('mysql');
 
 var db;
 
+function createTables() {
+  var query = "CREATE TABLE `chat_users` (" +
+              "`id` INT NOT NULL," +
+              "`name` VARCHAR(45) NULL," +
+              "`last_activity` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP," +
+              "PRIMARY KEY (`id`)," +
+              "UNIQUE INDEX `id_UNIQUE` (`id` ASC));";
+
+  db.query(query, function(err) {
+    if (err) {
+      throw err;
+    } else {
+      console.log("Table chat_users successfully created");
+    }
+  });
+
+  query = "CREATE TABLE `heroku_8cc4db1fe271d2f`.`chat_messages` (" +
+          "`id` INT NOT NULL AUTO_INCREMENT," +
+          "`author` VARCHAR(45) NULL," +
+          "`text` VARCHAR(255) NULL," +
+          "`timestamp` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP," +
+          "PRIMARY KEY (`id`)," +
+          "UNIQUE INDEX `id_UNIQUE` (`id` ASC));";
+
+  db.query(query, function(err) {
+    if (err) {
+      throw err;
+    } else {
+      console.log("Table chat_messages successfully created");
+    }
+  });
+}
+
 function connectToDB() {
   console.log('Connecting to DB...');
   db = mysql.createConnection(dbconfig);
@@ -29,6 +62,8 @@ function connectToDB() {
     if (err) {
       console.log('Error connecting to DB: ' + err);
       setTimeout(connectToDB, 2000);
+    } else {
+      createTables();
     }
   });
 }
@@ -72,7 +107,7 @@ var server = http.createServer(function(req, res) {
       break;
     }
   }
-}).listen(process.env.PORT || 8081);
+}).listen(process.env.PORT || 8080);
 
 function serveStatic(pathName, res) {
   fs.exists('./public' + pathName, function(exists) {
