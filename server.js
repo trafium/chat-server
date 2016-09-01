@@ -13,7 +13,7 @@ var mysql = require('mysql');
 var db;
 
 function createTables() {
-  var query = "CREATE TABLE `chat_users` (" +
+  var query = "CREATE TABLE `chat_users` IF NOT EXISTS (" +
               "`id` INT NOT NULL," +
               "`name` VARCHAR(45) NULL," +
               "`last_activity` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP," +
@@ -28,7 +28,7 @@ function createTables() {
     }
   });
 
-  query = "CREATE TABLE `heroku_8cc4db1fe271d2f`.`chat_messages` (" +
+  query = "CREATE TABLE `chat_messages` IF NOT EXISTS  (" +
           "`id` INT NOT NULL AUTO_INCREMENT," +
           "`author` VARCHAR(45) NULL," +
           "`text` VARCHAR(255) NULL," +
