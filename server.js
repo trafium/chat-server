@@ -14,8 +14,8 @@ var db;
 
 function createTables() {
   var query = "CREATE TABLE IF NOT EXISTS `chat_users` (" +
-              "`id` INT NOT NULL," +
-              "`name` VARCHAR(45) NULL," +
+              "`id` INT NOT NULL AUTO_INCREMENT," +
+              "`name` VARCHAR(45) NULL UNIQUE," +
               "`last_activity` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP," +
               "PRIMARY KEY (`id`)," +
               "UNIQUE INDEX `id_UNIQUE` (`id` ASC));";
@@ -107,7 +107,7 @@ var server = http.createServer(function(req, res) {
       break;
     }
   }
-}).listen(process.env.PORT || 8080);
+}).listen(process.env.PORT || 8081);
 
 function serveStatic(pathName, res) {
   fs.exists('./public' + pathName, function(exists) {
@@ -159,7 +159,6 @@ function postAjax(query, req, res) {
     }
     case 'submitMessage': {
       getPOSTData(req, function(data) {
-        console.log(data);
         actions.submitMessage(db, res, data);
       });
       break;
